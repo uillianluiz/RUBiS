@@ -1,93 +1,45 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
-  <body>
-    <?php
-    $scriptName = "StoreComment.php";
-    include("PHPprinter.php");
-    $startTime = getMicroTime();
-    
-    $to = $_POST['to'];
-    if ($to == null)
-    {
-      $to = $_GET['to'];
-      if ($to == null)
-      {
-         printError($scriptName, $startTime, "PutComment", "You must provide a 'to user' identifier!<br>");
-         exit();
-      }
-    }      
+    <body>
+        <?php
+        $scriptName = "StoreComment.php";
+        include("PHPprinter.php");
+        include("DBQueries.php");
+        $startTime = getMicroTime();
+        $DBQueries = new DBQueries();
 
-    $from = $_POST['from'];
-    if ($from == null)
-    {
-      $from = $_GET['from'];
-      if ($from == null)
-      {
-         printError($scriptName, $startTime, "PutComment", "You must provide a 'from user' identifier!<br>");
-         exit();
-      }
-    }
+        function post_or_get($index, $description) {
+            if (isset($_POST[$index])) {
+                return $_POST[$index];
+            } else if (isset($_GET[$index])) {
+                return $_GET[$index];
+            } else {
+                printError($scriptName, $startTime, "StoreComment", "You must provide a $description!<br>");
+                exit();
+            }
+        }
 
-    $itemId = $_POST['itemId'];
-    if ($itemId == null)
-    {
-      $itemId = $_GET['itemId'];
-      if ($itemId == null)
-      {
-         printError($scriptName, $startTime, "PutComment", "You must provide an item identifier!<br>");
-         exit();
-      }
-    }
+        $to = post_or_get('to', "'to user'");
+        $from = post_or_get('from', "'from user'");
+        $itemId = post_or_get('itemId', "item identifier");
+        $rating = post_or_get('rating', "rating");
+        $comment = post_or_get('comment', "comment");
 
-    $rating = $_POST['rating'];
-    if ($rating == null)
-    {
-      $rating = $_GET['rating'];
-      if ($rating == null)
-      {
-         printError($scriptName, $startTime, "StoreComment", "<h3>You must provide a user identifier!<br></h3>");
-         exit();
-      }
-    }
-      
-    $comment = $_POST['comment'];
-    if ($comment == null)
-    {
-      $comment = $_GET['comment'];
-      if ($comment == null)
-      {
-         printError($scriptName, $startTime, "StoreComment", "<h3>You must provide a comment !<br></h3>");
-         exit();
-      }
-    }
+        $DBQueries = new DBQueries();
 
-    getDatabaseLink($link);
-    begin($link);
+        $ret = $DBQueries->process_comment($from, $to, $itemId, $rating, $comment);
+        
+        if($ret == -1){
+            printError($scriptName, $startTime, "StoreComment", "<h3>Sorry, but this user $to does not exist.</h3><br>");
+            exit();
+        }
+        
+        printHTMLheader("RUBiS: Comment posting");
+        print("<center><h2>Your comment has been successfully posted.</h2></center>\n");
 
-    mysql_query("LOCK TABLES users WRITE, comments WRITE", $link) or die("ERROR: Failed to acquire locks on users and comments tables.");
-    // Update user rating
-    $toRes = mysql_query("SELECT id FROM users WHERE id=\"$to\"") or die("ERROR: User query failed");
-    if (mysql_num_rows($toRes) == 0)
-    {
-      printError($scriptName, $startTime, "StoreComment", "<h3>Sorry, but this user does not exist.</h3><br>");
-      exit();
-    }
-    $userRow = mysql_fetch_array($toRes);
-    $rating = $rating + $userRow["rating"];
-    mysql_query("UPDATE users SET rating=$rating WHERE id=$to") or die("ERROR: Unable to update user's rating\n");
+        $DBQueries = null;
 
-    // Add bid to database
-    $now = date("Y:m:d H:i:s");
-    $result = mysql_query("INSERT INTO comments VALUES (NULL, $from, $to, $itemId, $rating, '$now', \"$comment\")", $link) or die("ERROR: Failed to insert new comment in database.");
-    mysql_query("UNLOCK TABLES", $link) or die("ERROR: Failed to unlock users and comments tables.");
-    commit($link);
-
-    printHTMLheader("RUBiS: Comment posting");
-    print("<center><h2>Your comment has been successfully posted.</h2></center>\n");
-    
-    mysql_close($link);
-    
-    printHTMLfooter($scriptName, $startTime);
-    ?>
-  </body>
+        printHTMLfooter($scriptName, $startTime);
+        ?>
+    </body>
 </html>

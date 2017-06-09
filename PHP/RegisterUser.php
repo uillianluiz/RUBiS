@@ -1,135 +1,70 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
-  <body>
-    <?php
-    $scriptName = "RegisterUser.php";
-    include("PHPprinter.php");
-    $startTime = getMicroTime();
-    
-    $firstname = $_POST['firstname'];
-    if ($firstname == null)
-    {
-      $firstname = $_GET['firstname'];
-      if ($firstname == null)
-      {
-         printError($scriptName, $startTime, "Register user", "You must provide a first name!<br>");
-         exit();
-      }
-    }
-      
-    $lastname = $_POST['lastname'];
-    if ($lastname == null)
-    {
-      $lastname = $_GET['lastname'];
-      if ($lastname == null)
-      {
-         printError($scriptName, $startTime, "Register user", "You must provide a last name!<br>");
-         exit();
-      }
-    }
-      
-    $nickname = $_POST['nickname'];
-    if ($nickname == null)
-    {
-      $nickname = $_GET['nickname'];
-      if ($nickname == null)
-      {
-         printError($scriptName, $startTime, "Register user", "You must provide a nick name!<br>");
-         exit();
-      }
-    }
+    <body>
+        <?php
+        $scriptName = "RegisterUser.php";
+        include("PHPprinter.php");
+        include("DBQueries.php");
+        $startTime = getMicroTime();
+        $DBQueries = new DBQueries();
 
-    $email = $_POST['email'];
-    if ($email == null)
-    {
-      $email = $_GET['email'];
-      if ($email == null)
-      {
-         printError($scriptName, $startTime, "Register user", "You must provide an email address!<br>");
-         exit();
-      }
-    }
+        function post_or_get($index, $description) {
+            if (isset($_POST[$index])) {
+                return $_POST[$index];
+            } else if (isset($_GET[$index])) {
+                return $_GET[$index];
+            } else {
+                printError($scriptName, $startTime, "Register user", "You must provide a $description!<br>");
+                exit();
+            }
+        }
 
-    $password = $_POST['password'];
-    if ($password == null)
-    {
-      $password = $_GET['password'];
-      if ($password == null)
-      {
-         printError($scriptName, $startTime, "Register user", "You must provide a password!<br>");
-         exit();
-      }
-    }
+        $firstname = post_or_get('firstname', 'first name');
+        $lastname = post_or_get('lastname', 'last name');
+        $nickname = post_or_get('nickname', 'nick name');
+        $email = post_or_get('email', 'email address');
+        $password = post_or_get('password', 'password');
+        $region = post_or_get('region', 'region');
 
-    $region = $_POST['region'];
-    if ($region == null)
-    {
-      $region = $_GET['region'];
-      if ($region == null)
-      {
-         printError($scriptName, $startTime, "Register user", "You must provide a region!<br>");
-         exit();
-      }
-    }
+        $regionId = $DBQueries->selectRegionIdWhereName($region);
 
-    getDatabaseLink($link);
+        if ($regionId == -1) {
+            printError($scriptName, $startTime, "Register user","Region $region does not exist in the database!<br>\n");
+            exit();
+        }
 
-    begin($link);
-    // Check if the region really exists
-    $regionResult = mysql_query("SELECT * FROM regions WHERE name=\"$region\"", $link) or die("ERROR: Region query failed");
-    if (mysql_num_rows($regionResult) == 0)
-    {
-      printError($scriptName, $startTime, "Register user", "Region $region does not exist in the database!<br>\n");
-      mysql_free_result($regionResult);
-      commit($link);
-      exit();
-    }
-    else
-    {
-      $regionRow = mysql_fetch_array($regionResult);
-      $regionId = $regionRow["id"];
-      commit($link);
-      mysql_free_result($regionResult);
-    }
+        // Check if the nick name already exists
+        if ($DBQueries->doesNicknameExist($nickname) > 0) {
+            printError($scriptName, $startTime, "Register user", "The nickname you have choosen is already taken by someone else. Please choose a new nickname.<br>\n");
+            exit();
+        }
 
-    // Check if the nick name already exists
-    $nicknameResult = mysql_query("SELECT * FROM users WHERE nickname=\"$nickname\"", $link) or die("ERROR: Nickname query failed");
-    if (mysql_num_rows($nicknameResult) > 0)
-    {
-      printError($scriptName, $startTime, "Register user", "The nickname you have choosen is already taken by someone else. Please choose a new nickname.<br>\n");
-      mysql_free_result($nicknameResult);
-      exit();
-    }
-    mysql_free_result($nicknameResult);
+        // Add user to database
+        $DBQueries->insert_users($firstname, $lastname, $nickname, $password, $email, $regionId);
+        
+        $result = $DBQueries->selectUserByNickname($nickname);
+        $row = $result[0];
+        
 
-    // Add user to database
-    $now = date("Y:m:d H:i:s");
-    $result = mysql_query("INSERT INTO users VALUES (NULL, \"$firstname\", \"$lastname\", \"$nickname\", \"$password\", \"$email\", 0, 0, '$now', $regionId)", $link) or die("ERROR: Failed to insert new user in database.");
+        printHTMLheader("RUBiS: Welcome to $nickname");
+        print("<h2>Your registration has been processed successfully</h2><br>\n");
+        print("<h3>Welcome $nickname</h3>\n");
+        print("RUBiS has stored the following information about you:<br>\n");
+        print("First Name: " . $row["firstname"] . "<br>\n");
+        print("Last Name: " . $row["lastname"] . "<br>\n");
+        print("Nick Name: " . $row["nickname"] . "<br>\n");
+        print("Email: " . $row["email"] . "<br>\n");
+        print("Password: " . $row["password"] . "<br>\n");
+        print("Region: $region<br>\n");
+        print("<br>The following information has been automatically generated by RUBiS:<br>\n");
+        print("User id: " . $row["id"] . "<br>\n");
+        print("Creation date: " . $row["creation_date"] . "<br>\n");
+        print("Rating: " . $row["rating"] . "<br>\n");
+        print("Balance: " . $row["balance"] . "<br>\n");
 
-    $result = mysql_query("SELECT * FROM users WHERE nickname=\"$nickname\"", $link) or die("ERROR: Query user failed");
-    $row = mysql_fetch_array($result);
-    commit($link);
+        $DBQueries = null;
 
-    printHTMLheader("RUBiS: Welcome to $nickname");
-    print("<h2>Your registration has been processed successfully</h2><br>\n");
-    print("<h3>Welcome $nickname</h3>\n");
-    print("RUBiS has stored the following information about you:<br>\n");
-    print("First Name : ".$row["firstname"]."<br>\n");
-    print("Last Name  : ".$row["lastname"]."<br>\n");
-    print("Nick Name  : ".$row["nickname"]."<br>\n");
-    print("Email      : ".$row["email"]."<br>\n");
-    print("Password   : ".$row["password"]."<br>\n");
-    print("Region     : $region<br>\n"); 
-    print("<br>The following information has been automatically generated by RUBiS:<br>\n");
-    print("User id       :".$row["id"]."<br>\n");
-    print("Creation date :".$row["creation_date"]."<br>\n");
-    print("Rating        :".$row["rating"]."<br>\n");
-    print("Balance       :".$row["balance"]."<br>\n");
-    
-    mysql_free_result($result);
-    mysql_close($link);
-    
-    printHTMLfooter($scriptName, $startTime);
-    ?>
-  </body>
+        printHTMLfooter($scriptName, $startTime);
+        ?>
+    </body>
 </html>
