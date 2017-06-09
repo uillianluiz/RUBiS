@@ -1,0 +1,81 @@
+<project name="Client" default="dist" basedir=".">
+  <!-- RUBiS Client Emulator Ant build file -->
+
+  <!-- set global properties for this build -->
+  <property file="../build.properties" />
+
+
+  <!-- init rule creates build directory -->
+  <target name="init">
+    <!-- Create the time stamp -->
+    <tstamp/>
+    <!-- Create the build directory structure used by compile -->
+    <mkdir dir="${build}/RUBiS-${version}"/>
+  </target>
+
+  <!-- compile rule: Compile the beans and the servlets -->
+  <target name="compile" depends="init">
+    <javac srcdir="${src}"
+	   includes="edu/rice/rubis/client/**/*.java"
+	   destdir="${build}/RUBiS-${version}"
+	   classpath="${build.classpath}"
+	   depend="yes"
+	   deprecation="yes"
+	   />
+  </target>
+
+  <!-- Create the jar file -->
+  <target name="dist" depends="init, compile">
+     <jar destfile="${dist}/rubis_client.jar">
+	<fileset dir="${build}/RUBiS-${version}"
+		 includes="edu/rice/rubis/client/**/*.class"/>
+    </jar>
+  </target>
+
+  <!-- Generate Javadoc documentation -->
+  <target name="doc">
+     <mkdir dir="docs/api"/>
+     <javadoc packagenames="edu.rice.rubis.*.*"
+           sourcepath="."
+           defaultexcludes="yes"
+           destdir="docs/api"
+           author="true"
+           version="true"
+           use="true"
+           windowtitle="RUBiS API">
+       <doctitle><![CDATA[<h1>RUBiS Client Emulator API</h1>]]></doctitle>
+       <bottom><![CDATA[<i>Copyright &#169; 2002 - ObjectWeb Consortium - All Rights Reserved.</i>]]></bottom>
+     </javadoc>
+  </target>
+
+  <target name="clean">
+    <!-- Delete the ${build} and ${dist} directory trees -->
+    <delete dir="${build}"/>
+    <delete>
+      <fileset dir="${dist}" includes="rubis_client.jar"/>
+    </delete>
+    <delete>
+      <fileset dir="edu" includes="**/*.class"/>
+    </delete>
+  </target>
+
+  <!-- run the client -->
+  <target name="emulator" depends="init, compile">
+     <java classname="edu.rice.rubis.client.ClientEmulator"
+	   classpath="${build}/RUBiS-${version}"
+	   fork="yes"/>
+  </target>
+
+  <!-- init db
+  <target name="initDB" depends="init, compile">
+     <java classname="edu.rice.rubis.client.InitDB"
+	   classpath="${build}/RUBiS-${version}:.:./database"
+	   fork="yes">
+          <arg value="${initDB.param}"/> 
+     </java>
+
+  </target>
+
+-->
+
+</project>

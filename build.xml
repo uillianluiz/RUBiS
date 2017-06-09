@@ -1,0 +1,88 @@
+
+<project name="RUBiS" default="dist" basedir=".">
+  <!-- RUBiS main Ant build file -->
+  <property name="version" value="1.0"/>
+
+  <property file="build.properties" />
+
+
+
+  <!-- EJB versions -->
+ <target name="eb_bmp">
+    <ant dir="EJB_EntityBean_id_BMP" target="dist"/>
+ </target>
+
+ <target name="eb_cmp">
+   <ant dir="EJB_EntityBean_id" target="dist"/>
+ </target>
+
+ <target name="db_id">
+   <ant dir="EJB_DB_id" target="dist"/>
+ </target>
+
+ <target name="sb">
+    <ant dir="EJB_SessionBean" target="dist"/>
+ </target>
+
+ <target name="session_facade">
+    <ant dir="EJB_Session_facade" target="dist"/>
+ </target>
+
+ <target name="sf_local">
+    <ant dir="EJB_local_remote" target="dist"/>
+ </target>
+
+ <target name="mdb">
+    <ant dir="MDB" target="dist"/>
+ </target>
+
+  <!-- Servlet version -->
+
+ <target name="servlets">
+    <ant dir="Servlets" target="dist"/>
+ </target>
+
+  <!-- Client -->
+
+ <target name="client">
+    <ant dir="Client" target="dist"/>
+ </target>
+
+  <!-- run the client -->
+  <target name="emulator" depends="client">
+     <java classname="edu.rice.rubis.client.ClientEmulator"
+	   classpath="./Client/${build}/RUBiS-${version}"
+	   fork="yes"/>
+  </target>
+
+
+  <!-- Global rules -->
+
+    <target name="clean" description="Remove all the generated files or directories">
+        <ant dir="Client" target="clean"/>
+        <ant dir="EJB_EntityBean_id_BMP" target="clean"/>
+        <ant dir="EJB_EntityBean_id" target="clean"/>
+        <ant dir="EJB_DB_id" target="clean"/>
+        <ant dir="EJB_SessionBean" target="clean"/>
+        <ant dir="EJB_Session_facade" target="clean"/>
+        <ant dir="EJB_local_remote" target="clean"/>
+        <ant dir="MDB" target="clean"/>
+        <ant dir="Servlets" target="clean"/>
+
+    </target>
+
+    <target name="all" description="Build all the RUBiS versions and client emulator">
+        <ant dir="Client" target="dist"/>
+        <ant dir="EJB_EntityBean_id_BMP" target="dist"/>
+        <ant dir="EJB_EntityBean_id" target="dist"/>
+        <ant dir="EJB_DB_id" target="dist"/>
+        <ant dir="EJB_SessionBean" target="dist"/>
+        <ant dir="EJB_Session_facade" target="dist"/>
+        <ant dir="EJB_local_remote" target="dist"/>
+        <ant dir="MDB" target="dist"/>
+        <ant dir="Servlets" target="dist"/>
+
+    </target>
+
+</project>
+
