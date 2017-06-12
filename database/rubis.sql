@@ -1,4 +1,3 @@
-CREATE DATABASE rubis;
 connect rubis;
 
 CREATE TABLE categories (
