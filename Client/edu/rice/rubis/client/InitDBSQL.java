@@ -304,7 +304,7 @@ public class InitDBSQL {
                 ps.setInt(11, sellerId);
                 ps.setInt(12, categoryId + 1);
 
-                int maxBid = 0;
+                float maxBid = 0;
                 if (generateBids) { // Now deal with the bids
                     nbBids = rand.nextInt(getMaxBidsPerItem);
                     for (j = 0; j < nbBids; j++) {
@@ -320,7 +320,7 @@ public class InitDBSQL {
                         ps_bids.setInt(2, itemId);
                         ps_bids.setInt(3, rand.nextInt(quantity) + 1); //qty
                         ps_bids.setFloat(4, bid); //bid
-                        ps_bids.setInt(5, maxBid);
+                        ps_bids.setFloat(5, maxBid);
 
                         ps_bids.addBatch();
 
@@ -328,7 +328,7 @@ public class InitDBSQL {
                     }
                 }
 
-                ps.setFloat(7, nbBids);
+                ps.setInt(7, nbBids);
                 ps.setFloat(8, maxBid);
                 ps.addBatch();
 
