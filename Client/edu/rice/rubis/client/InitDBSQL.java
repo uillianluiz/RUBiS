@@ -229,8 +229,8 @@ public class InitDBSQL {
         try {
             c = InitDBSQL.getConnection();
             c.setAutoCommit(false);                   //(NULL, :name, :description, :initialPrice, :qty, :reservePrice, :buyNow, 0, 0, NOW(), :end, :userId, :categoryId)
-            PreparedStatement ps_items = c.prepareStatement("INSERT INTO items VALUES (DEFAULT, ?, ?, ?, ?, ?, ?, 0, 0, ?, ?, ?, ?)");
-            PreparedStatement ps_old_items = c.prepareStatement("INSERT INTO old_items VALUES (DEFAULT, ?, ?, ?, ?, ?, ?, 0, 0, ?, ?, ?, ?)");
+            PreparedStatement ps_items = c.prepareStatement("INSERT INTO items VALUES (DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            PreparedStatement ps_old_items = c.prepareStatement("INSERT INTO old_items VALUES (DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
             PreparedStatement ps = null;
             PreparedStatement ps_bids = c.prepareStatement("INSERT INTO bids VALUES (DEFAULT, ?,?,?,?,?, NOW())");
             PreparedStatement ps_comments = c.prepareStatement("INSERT INTO comments VALUES (DEFAULT, ?,?,?,?,NOW(), ?)");
