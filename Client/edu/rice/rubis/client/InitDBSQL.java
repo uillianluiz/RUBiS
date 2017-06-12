@@ -225,6 +225,7 @@ public class InitDBSQL {
             System.out.println("Generating 1 comment per item");
 
         Connection c;
+        int BATCH_SIZE = 1000;
 
         try {
             c = InitDBSQL.getConnection();
@@ -358,12 +359,21 @@ public class InitDBSQL {
                     ps_user_update.setInt(2, sellerId);
                     ps_user_update.addBatch();
                 }
+                if(i % BATCH_SIZE == BATCH_SIZE -1){
+                    ps_items.executeBatch();
+                    ps_old_items.executeBatch();
+                    ps_bids.executeBatch();
+                    ps_comments.executeBatch();
+                    ps_user_update.executeBatch();
+                }
             }
-            ps_items.executeBatch();
-            ps_old_items.executeBatch();
-            ps_bids.executeBatch();
-            ps_comments.executeBatch();
-            ps_user_update.executeBatch();
+            if (totalItems % BATCH_SIZE != 0) {
+                ps_items.executeBatch();
+                ps_old_items.executeBatch();
+                ps_bids.executeBatch();
+                ps_comments.executeBatch();
+                ps_user_update.executeBatch();
+            }
             c.setAutoCommit(true);
         } catch (Exception e) {
             System.err.println("Error while generating items: " + e.getMessage());
