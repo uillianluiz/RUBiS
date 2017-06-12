@@ -304,6 +304,7 @@ public class InitDBSQL {
                 ps.setInt(11, sellerId);
                 ps.setInt(12, categoryId + 1);
 
+                nbBids=0;
                 float maxBid = 0;
                 if (generateBids) { // Now deal with the bids
                     nbBids = rand.nextInt(getMaxBidsPerItem);
