@@ -233,7 +233,7 @@ public class InitDBSQL {
             PreparedStatement ps = null;
             PreparedStatement ps_bids = c.prepareStatement("INSERT INTO bids VALUES (DEFAULT, ?,?,?,?,?, NOW())");
             PreparedStatement ps_comments = c.prepareStatement("INSERT INTO comments VALUES (DEFAULT, ?,?,?,?,NOW(), ?)");
-            PreparedStatement ps_user_update = c.preparedStatement("UPDATE users SET rating=rating+? WHERE id=?");
+            PreparedStatement ps_user_update = c.prepareStatement("UPDATE users SET rating=rating+? WHERE id=?");
 
             for (i = 0; i < totalItems; i++) {
                 // Generate the item
@@ -312,14 +312,14 @@ public class InitDBSQL {
 
                         int itemId = i+1;
                         int userId = rand.nextInt(getNbOfUsers) + 1;
-                        int bid = initialPrice + addBid;
+                        float bid = initialPrice + addBid;
                         maxBid = Math.max(maxBid, bid);
 
                         ps_bids = c.prepareStatement("INSERT INTO bids VALUES (DEFAULT, ?,?,?,?,?, NOW())");
                         ps_bids.setInt(1, userId);
                         ps_bids.setInt(2, itemId);
                         ps_bids.setInt(3, rand.nextInt(quantity) + 1); //qty
-                        ps_bids.setInt(4, bid); //bid
+                        ps_bids.setFloat(4, bid); //bid
                         ps_bids.setInt(5, maxBid);
 
                         ps_bids.addBatch();
