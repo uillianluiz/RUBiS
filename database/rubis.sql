@@ -1,5 +1,3 @@
-connect rubis;
-
 CREATE TABLE categories (
    id INTEGER UNSIGNED NOT NULL UNIQUE AUTO_INCREMENT,
    name VARCHAR(50),
