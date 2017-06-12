@@ -19,29 +19,12 @@ import java.text.SimpleDateFormat;
  */
 
 public class InitDBSQL {
-    private URLGenerator urlGen = null;
-    private Random rand = new Random();
-    private RUBiSProperties rubis = null;
-    private int[] itemsPerCategory;
-
-
-    /**
-     * Creates a new <code>InitDB</code> instance.
-     */
-    public InitDBSQL() {
-        rubis = new RUBiSProperties();
-        urlGen = rubis.checkPropertiesFileAndGetURLGenerator();
-        if (urlGen == null)
-            Runtime.getRuntime().exit(1);
-        itemsPerCategory = rubis.getItemsPerCategory();
-    }
-
 
     public static Connection getConnection() throws SQLException {
         String DB_CONN_STRING = "jdbc:mysql://localhost:3306/rubis?useSSL=true&serverTimezone=UTC&rewriteBatchedStatements=true";
         String DRIVER_CLASS_NAME = "com.mysql.cj.jdbc.Driver";
         String USER_NAME = "root";
-        String PASSWORD = "batata83";
+        String PASSWORD = "";
 
         Connection result = null;
         try {
@@ -58,6 +41,24 @@ public class InitDBSQL {
             return null;
         }
         return result;
+    }
+
+
+    private URLGenerator urlGen = null;
+    private Random rand = new Random();
+    private RUBiSProperties rubis = null;
+    private int[] itemsPerCategory;
+
+
+    /**
+     * Creates a new <code>InitDB</code> instance.
+     */
+    public InitDBSQL() {
+        rubis = new RUBiSProperties();
+        urlGen = rubis.checkPropertiesFileAndGetURLGenerator();
+        if (urlGen == null)
+            Runtime.getRuntime().exit(1);
+        itemsPerCategory = rubis.getItemsPerCategory();
     }
 
     /**
