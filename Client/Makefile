@@ -5,7 +5,7 @@ include ../config.mk
 ####################
 
 ClientFiles = URLGenerator URLGeneratorEJB URLGeneratorServlets URLGeneratorPHP RUBiSProperties Stats \
-	      TransitionTable ClientEmulator UserSession InitDB ../beans/TimeManagement
+	      TransitionTable ClientEmulator UserSession InitDB InitDBSQL ../beans/TimeManagement
 
 all_client_sources =  $(addprefix edu/rice/rubis/client/, $(addsuffix .java, $(ClientFiles)))
 all_client_obj = $(addprefix edu/rice/rubis/client/, $(addsuffix .class, $(ClientFiles)))
@@ -18,6 +18,9 @@ all: client
 initDB:
 	${JAVA} -classpath .:./database edu.rice.rubis.client.InitDB ${PARAM}
 
+initDBSQL:
+	${JAVA} -classpath .:mysql-connector-java-6.0.6.jar:./database edu.rice.rubis.client.InitDBSQL ${PARAM}
+
 emulator:
 	${JAVA} -classpath . edu.rice.rubis.client.ClientEmulator
 
@@ -27,4 +30,3 @@ javadoc :
 
 clean:
 	${RM} -Rf edu/rice/rubis/client/*.class edu/rice/rubis/beans/*.class doc/* rubis_client.jar
-
