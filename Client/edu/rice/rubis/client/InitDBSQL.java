@@ -289,9 +289,9 @@ public class InitDBSQL {
 
                 Calendar now = Calendar.getInstance();
 
-                String start = new SimpleDateFormat("Y:m:d H:i:s").format(now.getTime());
+                String start = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss").format(now.getTime());
                 now.add(Calendar.DATE, duration);
-                String end = new SimpleDateFormat("Y:m:d H:i:s").format(now.getTime());
+                String end = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss").format(now.getTime());
                 ps.setString(1, name);
                 ps.setString(2, description);
                 ps.setFloat(3, initialPrice);
@@ -366,7 +366,7 @@ public class InitDBSQL {
             ps_user_update.executeBatch();
             c.setAutoCommit(true);
         } catch (Exception e) {
-            System.err.println("Error while generating users: " + e.getMessage());
+            System.err.println("Error while generating items: " + e.getMessage());
         }
         System.out.println(" Done!");
     }
