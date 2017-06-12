@@ -25,19 +25,22 @@ Installation steps:
 
 Configuration steps:
 
-1. Import rubis tables and default data to the database `rubis`
-    * `cd database`
+1. Create a rubis database
+    * `mysql -uroot -p`
+    * `CREATE DATABASE rubis;`
+2. Import rubis tables and default data to the database
+    * `cd database`
     * `mysql -uroot rubis -p < rubis.sql`
     * `mysql -uroot rubis -p < categories.sql`
     * `mysql -uroot rubis -p < regions.sql`
-2. Modify the database connection configuration
+4. Modify the database connection configuration
     * `nano PHP/DBConnection.php`
-3. Copy the PHP folder to the apache location
+5. Copy the PHP folder to the apache location
     * `cp -r PHP/ /var/www/html/`
-4. Configure the rubis client properties
+6. Configure the rubis client properties
     * `cd Client`
     * `python generateProperties.py`
-5. Initializate the database
+7. Initializate the database
     * `cd Cliente`
     * `make initDB PARAM="all"`
 
