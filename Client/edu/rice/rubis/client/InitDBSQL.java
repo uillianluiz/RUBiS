@@ -24,7 +24,7 @@ public class InitDBSQL {
         String DB_CONN_STRING = "jdbc:mysql://localhost:3306/rubis?useSSL=true&serverTimezone=UTC&rewriteBatchedStatements=true";
         String DRIVER_CLASS_NAME = "com.mysql.cj.jdbc.Driver";
         String USER_NAME = "root";
-        String PASSWORD = "batata83";
+        String PASSWORD = "";
 
         Connection result = null;
         try {
@@ -319,7 +319,6 @@ public class InitDBSQL {
                         float bid = initialPrice + addBid;
                         maxBid = Math.max(maxBid, bid);
 
-                        ps_bids = c.prepareStatement("INSERT INTO bids VALUES (DEFAULT, ?,?,?,?,?, NOW())");
                         ps_bids.setInt(1, userId);
                         ps_bids.setInt(2, itemId);
                         ps_bids.setInt(3, rand.nextInt(quantity) + 1); //qty
