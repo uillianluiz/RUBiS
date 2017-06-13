@@ -24,7 +24,7 @@ public class InitDBSQL {
         String DB_CONN_STRING = "jdbc:mysql://localhost:3306/rubis?useSSL=true&serverTimezone=UTC&rewriteBatchedStatements=true";
         String DRIVER_CLASS_NAME = "com.mysql.cj.jdbc.Driver";
         String USER_NAME = "root";
-        String PASSWORD = "";
+        String PASSWORD = "batata83";
 
         Connection result = null;
         try {
@@ -229,7 +229,7 @@ public class InitDBSQL {
 
         try {
             c = InitDBSQL.getConnection();
-            c.setAutoCommit(false);                   //(NULL, :name, :description, :initialPrice, :qty, :reservePrice, :buyNow, 0, 0, NOW(), :end, :userId, :categoryId)
+            //c.setAutoCommit(false);                   //(NULL, :name, :description, :initialPrice, :qty, :reservePrice, :buyNow, 0, 0, NOW(), :end, :userId, :categoryId)
             PreparedStatement ps_items = c.prepareStatement("INSERT INTO items VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
             PreparedStatement ps_old_items = c.prepareStatement("INSERT INTO old_items VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
             PreparedStatement ps = null;
@@ -361,6 +361,7 @@ public class InitDBSQL {
                     ps_user_update.addBatch();
                 }
                 if(i % BATCH_SIZE == BATCH_SIZE -1){
+                    System.out.print(".");
                     ps_items.executeBatch();
                     ps_old_items.executeBatch();
                     ps_bids.executeBatch();
@@ -369,13 +370,14 @@ public class InitDBSQL {
                 }
             }
             if (totalItems % BATCH_SIZE != 0) {
+                System.out.print(".");
                 ps_items.executeBatch();
                 ps_old_items.executeBatch();
                 ps_bids.executeBatch();
                 ps_comments.executeBatch();
                 ps_user_update.executeBatch();
             }
-            c.setAutoCommit(true);
+            //c.setAutoCommit(true);
         } catch (Exception e) {
             System.err.println("Error while generating items: " + e.getMessage());
         }
