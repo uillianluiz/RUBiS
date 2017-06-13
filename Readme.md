@@ -1,6 +1,6 @@
 ## RUBiS
 
-This is a modified implementation of RUBiS (RUBiS: Rice University Bidding System) that supports PHP7, PDO connections, and faster initialization of the database (it takes hours instead of days).
+This is a modified implementation of RUBiS (RUBiS: Rice University Bidding System) that supports PHP7, PDO connections, and faster initialization of the database.
 
 More information on the RUBiS project, and for the original source code, check [here](http://rubis.ow2.org/).
 
@@ -46,7 +46,7 @@ Configuration steps:
 6. Configure the rubis client properties (optional, you may manually edit the `rubis.properties` file)
     * `cd Client`
     * `python generateProperties.py`
-7. Initialize the database
+7. Initialize the database ([learn more](docs/initDB.md))
     * Updated and faster method:
         * `cd Client`
         * Modify your database connection in the file (lines 24, 26 and 27):
