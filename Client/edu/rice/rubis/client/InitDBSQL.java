@@ -265,7 +265,7 @@ public class InitDBSQL {
                     else
                         quantity = rand.nextInt(getMaxItemQty) + 1;
                 } else {
-                    ps = ps_old_items;
+                    ps = ps_items;
                     if (i < getPercentReservePrice * activeItems / 100)
                         reservePrice = rand.nextInt(1000) + initialPrice;
                     else
