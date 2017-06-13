@@ -1,15 +1,15 @@
 ## RUBiS
 
-This is a modified implementation of RUBiS (RUBiS: Rice University Bidding System) that supports PHP7, PDO connections, and faster initialization of the database.
+This is a modified implementation of RUBiS (RUBiS: Rice University Bidding System) that supports PHP7, PDO connections, and faster initialization of the database (it takes hours instead of days).
 
-More information on the RUBiS project, and the original source code is found [here](http://rubis.ow2.org/).
+More information on the RUBiS project, and for the original source code, check [here](http://rubis.ow2.org/).
 
 Requirements:
 
-1. PHP7 (recommended) or PHP5
-2. MySQL (Other versions, including SQL Server, may be supported)
+1. PHP7
+2. MySQL (Other database servers may be supported. They were not tested, though)
 3. Apache
-4. Java (for building the client)
+4. Java (for building and executing the client)
 5. Python (optional, for setting up the `rubis.properties` file)
 
 Installation steps:
@@ -20,9 +20,8 @@ Installation steps:
     * `sudo apt-get install mysql-server`
 3. Install Apache2
     * `sudo apt-get install apache2`
-3. Install PHP
+3. Install PHP7
     * `sudo apt-get install php libapache2-mod-php php-mcrypt php-mysql`
-    * If you want to install PHP5, check [here](https://askubuntu.com/questions/761713/how-can-i-downgrade-from-php-7-to-php-5-6-on-ubuntu-16-04/762161#762161) for a detailed instructions.
     * If later on you have MySQL PDO driver problems, check [this thread out](https://stackoverflow.com/a/42929132).
 4. Install Java
     * `sudo apt-get install default-jdk`
@@ -47,7 +46,7 @@ Configuration steps:
 6. Configure the rubis client properties (optional, you may manually edit the `rubis.properties` file)
     * `cd Client`
     * `python generateProperties.py`
-7. Initialization of the database
+7. Initialize the database
     * Updated and faster method:
         * `cd Client`
         * Modify your database connection in the file (lines 24, 26 and 27):
@@ -68,4 +67,3 @@ Emulator execution:
 Extra options:
 
 * The regions and categories may be altered. Check file `database/README` for more information.
-* You can use the PHP5 version. Just copy the `PHP5.6` folder instead, renaming it to `PHP`. Also, modify the database connection in the file `PHPprinter.php`
