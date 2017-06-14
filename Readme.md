@@ -61,6 +61,7 @@ Configuration steps:
 Emulator execution:
 
 * You may modify the `workload_transition_table` or other configurations on the `rubis.properties` file.
+* Other Information regarding the emulator you may found [here](docs/emulator.md).
 * To execute the benchmark:
     * `make emulator`
 

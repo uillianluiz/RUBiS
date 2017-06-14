@@ -75,11 +75,11 @@ database_comment_max_length = 2048
 # Monitoring Information
 monitoring_debug_level = 0
 monitoring_program = /usr/bin/sar
-monitoring_options = -n DEV -n SOCK -rubcw
-monitoring_sampling_in_seconds = 1
+monitoring_options = -n DEV -n SOCK -rubw
+monitoring_sampling_in_seconds = 5
 monitoring_rsh = /usr/bin/rsh
 monitoring_scp = /usr/bin/scp
-monitoring_gnuplot_terminal = gif""".format(phpHost, dbHost, parrent_path)
+monitoring_gnuplot_terminal = jpeg""".format(phpHost, dbHost, parrent_path)
 
 outputFile = open("rubis.properties", "w")
 outputFile.write(properties)
