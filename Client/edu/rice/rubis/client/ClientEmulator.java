@@ -166,8 +166,6 @@ public class ClientEmulator
     GregorianCalendar endDownRampDate;
     Process           webServerMonitor = null;
     Process           dbServerMonitor = null;
-    Process           ejbServerMonitor = null;
-    Process           servletsServerMonitor = null;
     Process           clientMonitor;
     Process[]         remoteClientMonitor = null;
     Process[]         remoteClient = null;
@@ -269,22 +267,6 @@ public class ClientEmulator
       // Monitor Database server
       System.out.println("ClientEmulator: Starting monitoring program on Database server "+client.rubis.getDBServerName()+"<br>\n");
       dbServerMonitor = client.startMonitoringProgram(client.rubis.getDBServerName(), reportDir+"db_server");
-
-      // Monitoring EJB server, if any
-      String EJBServer = client.rubis.getEJBServerName().trim();
-      if (EJBServer.length() > 0)
-      {
-        System.out.println("ClientEmulator: Starting monitoring program on EJB server "+client.rubis.getEJBServerName()+"<br>\n");
-        ejbServerMonitor = client.startMonitoringProgram(client.rubis.getEJBServerName(), reportDir+"ejb_server");
-      }
-
-      // Monitoring Servlet server, if any
-      String ServletsServer = client.rubis.getServletsServerName().trim();
-      if (ServletsServer.length() > 0)
-      {
-        System.out.println("ClientEmulator: Starting monitoring program on Servlets server "+client.rubis.getServletsServerName()+"<br>\n");
-        servletsServerMonitor = client.startMonitoringProgram(client.rubis.getServletsServerName(), reportDir+"servlets_server");
-      }
 
       // Monitor local client
       System.out.println("ClientEmulator: Starting monitoring program locally on client<br>\n");
@@ -471,20 +453,6 @@ public class ClientEmulator
       System.out.println("<br><B>Database server</B><br>");
       client.printNodeInformation(client.rubis.getDBServerName());
 
-      // EJB server, if any
-      if (ejbServerMonitor != null)
-      {
-        System.out.println("<br><B>EJB server</B><br>");
-        client.printNodeInformation(client.rubis.getEJBServerName());
-      }
-
-      // Servlets server, if any
-      if (servletsServerMonitor != null)
-      {
-        System.out.println("<br><B>Servlets server</B><br>");
-        client.printNodeInformation(client.rubis.getServletsServerName());
-      }
-
       // Client
       System.out.println("<br><B>Local client</B><br>");
       client.printNodeInformation("localhost");
@@ -564,10 +532,6 @@ public class ClientEmulator
         }
         webServerMonitor.waitFor();
         dbServerMonitor.waitFor();
-        if (ejbServerMonitor != null)
-          ejbServerMonitor.waitFor();
-        if (servletsServerMonitor != null)
-          servletsServerMonitor.waitFor();
       }
 
       catch (Exception e)
@@ -579,12 +543,7 @@ public class ClientEmulator
       try
       {
         String[] cmd = new String[4];
-        if (ejbServerMonitor != null)
-          cmd[0] = "bench/ejb_generate_graphs.sh";
-        else if (servletsServerMonitor != null)
-          cmd[0] = "bench/servlets_generate_graphs.sh";
-        else
-          cmd[0] = "bench/generate_graphs.sh";
+        cmd[0] = "bench/generate_graphs.sh";
         cmd[1] = reportDir;
         cmd[2] = client.rubis.getGnuPlotTerminal();
         cmd[3] = Integer.toString(client.rubis.getRemoteClients().size()+1);
