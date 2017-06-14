@@ -15,7 +15,7 @@ import java.util.Random;
 import java.util.Vector;
 
 /**
- * RUBiS client emulator. 
+ * RUBiS client emulator.
  * This class plays random user sessions emulating a Web browser.
  *
  * @author <a href="mailto:cecchet@rice.edu">Emmanuel Cecchet</a> and <a href="mailto:julie.marguerite@inrialpes.fr">Julie Marguerite</a>
@@ -131,11 +131,12 @@ public class ClientEmulator
     {
       File dir = new File(".");
       String nodeInfoProgram = dir.getCanonicalPath()+"/bench/node_info.sh";
-      
-      String[] cmd = new String[3];
+
+      String[] cmd = new String[4];
       cmd[0] = rubis.getMonitoringRsh();
       cmd[1] = node;
-      cmd[2] = nodeInfoProgram;
+      cmd[2] = "/bin/sh";
+      cmd[3] = nodeInfoProgram;
       Process p = Runtime.getRuntime().exec(cmd);
       BufferedReader read = new BufferedReader(new InputStreamReader(p.getInputStream()));
       String msg;
@@ -150,7 +151,7 @@ public class ClientEmulator
   }
 
   /**
-   * Main program take an optional output file argument only 
+   * Main program take an optional output file argument only
    * if it is run on as a remote client.
    *
    * @param args optional output file if run as remote client
@@ -205,7 +206,7 @@ public class ClientEmulator
       System.out.println("<h2>RUBiS client emulator - (C) Rice University/INRIA 2001</h2><p>\n");
       startDate = new GregorianCalendar();
       System.out.println("<h3>Test date: "+TimeManagement.dateToString(startDate)+"</h3><br>\n");
-    
+
       System.out.println("<A HREF=\"#config\">Test configuration</A><br>");
       System.out.println("<A HREF=\"trace_client0.html\">Test trace</A><br>");
       System.out.println("<A HREF=\"perf.html\">Test performance report</A><br><p>");
@@ -232,7 +233,7 @@ public class ClientEmulator
     Stats          downRampStats = new Stats(client.rubis.getNbOfRows());
     Stats          allStats = new Stats(client.rubis.getNbOfRows());
     UserSession[]  sessions = new UserSession[client.rubis.getNbOfClients()];
-    
+
     System.out.println("<p><hr><p>");
 
     if (isMainClient)
@@ -280,7 +281,7 @@ public class ClientEmulator
       // Monitoring Servlet server, if any
       String ServletsServer = client.rubis.getServletsServerName().trim();
       if (ServletsServer.length() > 0)
-      {        
+      {
         System.out.println("ClientEmulator: Starting monitoring program on Servlets server "+client.rubis.getServletsServerName()+"<br>\n");
         servletsServerMonitor = client.startMonitoringProgram(client.rubis.getServletsServerName(), reportDir+"servlets_server");
       }
@@ -439,7 +440,7 @@ public class ClientEmulator
       System.out.println("Output redirection failed, displaying results on standard output ("+e.getMessage()+")");
     }
 
-    System.out.println("<center><h2>*** Performance Report ***</h2></center><br>");    
+    System.out.println("<center><h2>*** Performance Report ***</h2></center><br>");
     System.out.println("<A HREF=\"perf.html\">Overall performance report</A><br>");
     System.out.println("<A HREF=\"stat_client0.html\">Main client (localhost) statistics</A><br>");
     for (int i = 0 ; i < client.rubis.getRemoteClients().size() ; i++)
@@ -465,11 +466,11 @@ public class ClientEmulator
       // Web server
       System.out.println("<B>Web server</B><br>");
       client.printNodeInformation(client.rubis.getWebServerName());
-      
+
       // Database server
       System.out.println("<br><B>Database server</B><br>");
       client.printNodeInformation(client.rubis.getDBServerName());
-        
+
       // EJB server, if any
       if (ejbServerMonitor != null)
       {
@@ -500,7 +501,7 @@ public class ClientEmulator
         PrintStream outputStream = new PrintStream(new FileOutputStream(reportDir+"stat_client0.html"));
         System.setOut(outputStream);
         System.setErr(outputStream);
-        System.out.println("<center><h2>*** Performance Report ***</h2></center><br>");    
+        System.out.println("<center><h2>*** Performance Report ***</h2></center><br>");
         System.out.println("<A HREF=\"perf.html\">Overall performance report</A><br>");
         System.out.println("<A HREF=\"stat_client0.html\">Main client (localhost) statistics</A><br>");
         for (int i = 0 ; i < client.rubis.getRemoteClients().size() ; i++)
@@ -573,8 +574,8 @@ public class ClientEmulator
       {
         System.out.println("An error occured while waiting for remote processes termination ("+e.getMessage()+")");
       }
-      
-      // Generate the graphics 
+
+      // Generate the graphics
       try
       {
         String[] cmd = new String[4];

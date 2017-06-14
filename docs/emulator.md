@@ -16,6 +16,8 @@ These are the necessary packages:
 
 * Gnuplot:
   * `sudo apt-get install gnuplot`
+* awk
+  * `sudo apt-get install gawk`
 * Sysstat (required in both client and server hosts)
   * `sudo apt-get install sysstat`
 
