@@ -75,7 +75,7 @@ database_comment_max_length = 2048
 # Monitoring Information
 monitoring_debug_level = 0
 monitoring_program = /usr/bin/sar
-monitoring_options = -n DEV -n SOCK -rubwF
+monitoring_options = -n DEV -n SOCK -rubwFB
 monitoring_sampling_in_seconds = 5
 monitoring_rsh = /usr/bin/rsh
 monitoring_scp = /usr/bin/scp
