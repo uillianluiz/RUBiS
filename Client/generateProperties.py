@@ -77,7 +77,7 @@ monitoring_debug_level = 0
 monitoring_program = /usr/bin/sar
 monitoring_options = -n DEV -n SOCK -rubwFB
 monitoring_sampling_in_seconds = 5
-monitoring_rsh = /usr/bin/rsh
+monitoring_rsh = /usr/bin/ssh
 monitoring_scp = /usr/bin/scp
 monitoring_gnuplot_terminal = jpeg""".format(phpHost, dbHost, parrent_path)
 

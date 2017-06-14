@@ -108,8 +108,11 @@ public class ClientEmulator
       cmd[1] = node.trim();
       cmd[2] = rubis.getMonitoringProgram()+" "+rubis.getMonitoringOptions()+" "+
         rubis.getMonitoringSampling()+" "+fullTimeInSec+" > "+outputFileName;
-      System.out.println("&nbsp &nbsp Command is: "+cmd[0]+" "+cmd[1]+" "+cmd[2]+"<br>\n");
-      return Runtime.getRuntime().exec(cmd);
+
+      String command = "sh " + "bench/monitor.sh " + cmd[1] + " " + rubis.getMonitoringSampling() + " " +fullTimeInSec + " " + outputFileName;
+      System.out.println("&nbsp &nbsp Command is: "+command+"<br>\n");
+
+      return Runtime.getRuntime().exec(command);
     }
     catch (IOException ioe)
     {
