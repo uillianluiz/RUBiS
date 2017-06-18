@@ -100,7 +100,7 @@ public class ClientEmulator
    */
   private Process startMonitoringProgram(String node, String outputFileName)
   {
-    int fullTimeInSec = (rubis.getUpRampTime()+rubis.getSessionTime()+rubis.getDownRampTime())/1000 + 5; // Give 5 seconds extra for init
+    int fullTimeInSec = (int)Math.ceil(((rubis.getUpRampTime()+rubis.getSessionTime()+rubis.getDownRampTime())/1000 + 5)/rubis.getMonitoringSampling()); // Give 5 seconds extra for init
     try
     {
       String[] cmd = new String[3];
