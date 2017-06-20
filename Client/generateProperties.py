@@ -17,11 +17,11 @@ httpd_port = 80
 # Precise which version to use. Valid options are : PHP, Servlets, EJB
 httpd_use_version = PHP
 
-ejb_server = none
+ejb_server =
 ejb_html_path = /ejb_rubis_web
 ejb_script_path = /ejb_rubis_web/servlet
 
-servlets_server = none
+servlets_server =
 servlets_html_path = /Servlet_HTML
 servlets_script_path = /servlet
 
@@ -33,7 +33,7 @@ workload_remote_client_nodes =
 workload_remote_client_command = /usr/local/java/jdk1.3.1/bin/java -classpath RUBiS edu.rice.rubis.client.ClientEmulator
 workload_number_of_clients_per_node = 100
 
-workload_transition_table = {2}/workload/transitions.txt
+workload_transition_table = {2}/workload/default_transitions.txt
 workload_number_of_columns = 27
 workload_number_of_rows = 29
 workload_maximum_number_of_transitions = 1000
